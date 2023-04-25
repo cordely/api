@@ -17,9 +17,9 @@ const protoPackage = protogen.GoImportPath("google.golang.org/protobuf/proto")
 
 var methodSets = make(map[string]int)
 
-// generateFile generates a _http.pb.go file containing kratos errors definitions.
-func generateFile(gen *protogen.Plugin, file *protogen.File, omitempty bool) *protogen.GeneratedFile {
-	if len(file.Services) == 0 || (omitempty && !hasHTTPRule(file.Services)) {
+// generateFiles generates a gateway_mapping.go file containing kratos errors definitions.
+func generateFiles(gen *protogen.Plugin, omitempty bool) *protogen.GeneratedFile {
+	if len(gen.Files) == 0 {
 		return nil
 	}
 	g := gen.NewGeneratedFile("gateway_mapping.go", "")
@@ -61,7 +61,15 @@ func (r *Router) ReplyMessageFunc() func() proto.Message {
 	return r.replyMessageFunc
 }`)
 	g.P("var CommonMapper = []*Router{")
-	generateFileContent(gen, file, g, omitempty)
+	for _, f := range gen.Files {
+		if !f.Generate {
+			continue
+		}
+		if len(f.Services) == 0 || (omitempty && !hasHTTPRule(f.Services)) {
+			return nil
+		}
+		generateFileContent(gen, f, g, omitempty)
+	}
 	g.P("}")
 	return g
 }
