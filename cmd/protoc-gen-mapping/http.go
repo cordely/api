@@ -60,6 +60,7 @@ func (r *Router) ReqMessageFunc() func() proto.Message {
 func (r *Router) ReplyMessageFunc() func() proto.Message {
 	return r.replyMessageFunc
 }`)
+	g.P("// test110")
 	g.P("var CommonMapper = []*Router{")
 	for _, f := range gen.Files {
 		if !f.Generate {
@@ -70,8 +71,9 @@ func (r *Router) ReplyMessageFunc() func() proto.Message {
 		}
 		generateFileContent(gen, f, g, omitempty)
 	}
-	g.P()
 	g.P("}")
+	g.P("// test111")
+	g.P("// test112")
 	return g
 }
 
