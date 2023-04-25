@@ -60,26 +60,20 @@ func (r *Router) ReqMessageFunc() func() proto.Message {
 func (r *Router) ReplyMessageFunc() func() proto.Message {
 	return r.replyMessageFunc
 }`)
-	g.P("// test110")
 	g.P("var CommonMapper = []*Router{")
 	for _, f := range gen.Files {
 		if !f.Generate {
 			continue
 		}
-		if len(f.Services) == 0 || (omitempty && !hasHTTPRule(f.Services)) {
-			return nil
-		}
 		generateFileContent(gen, f, g, omitempty)
 	}
 	g.P("}")
-	g.P("// test111")
-	g.P("// test112")
 	return g
 }
 
 // generateFileContent generates the kratos errors definitions, excluding the package statement.
 func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, omitempty bool) {
-	if len(file.Services) == 0 {
+	if len(file.Services) == 0 || (omitempty && !hasHTTPRule(file.Services)) {
 		return
 	}
 	g.P("// ", file.GeneratedFilenamePrefix, ".proto")
