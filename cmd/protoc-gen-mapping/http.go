@@ -70,6 +70,7 @@ func (r *Router) ReplyMessageFunc() func() proto.Message {
 		}
 		generateFileContent(gen, f, g, omitempty)
 	}
+	g.P()
 	g.P("}")
 	return g
 }
